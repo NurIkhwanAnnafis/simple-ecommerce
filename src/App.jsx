@@ -15,6 +15,7 @@ import { selectCurrentUser } from './redux/user/user.selector';
 import { createStructuredSelector } from 'reselect';
 
 import './App.css';
+import CollectionPage from './pages/collection/collection.component';
 
 class App extends React.Component {
 
@@ -50,10 +51,11 @@ class App extends React.Component {
       <div>
         <Header/>
           <Routes>
-            <Route exact path="/" element={<HomePage />} />
+            <Route caseSensitive path="/" element={<HomePage />} />
             <Route path="/shop" element={<ShopPage />} />
+            <Route path="/shop/:id" element={<CollectionPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
-            <Route exact path="/signin" element={currentUser ? <Navigate to='/' /> : <SignInAndSignUp /> } />
+            <Route caseSensitive path="/signin" element={currentUser ? <Navigate to='/' /> : <SignInAndSignUp /> } />
           </Routes>
         </div>
     )
