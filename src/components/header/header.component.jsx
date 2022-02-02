@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 import { auth } from "../../firebase/firebase.utils";
 
@@ -13,7 +12,7 @@ import { selectCurrentUser } from "../../redux/user/user.selector";
 import { selectCartHidden } from "../../redux/cart/cart.selectors";
 import { createStructuredSelector } from "reselect";
 
-import { HeaderContainer, LogoContainer, OptionsContainer, OptionDiv, OptionLink } from "./header.style";
+import { HeaderContainer, LogoContainer, OptionsContainer, OptionLink } from "./header.style";
 
 const Header = ({ currentUser, hidden }) => (
   <HeaderContainer className="header">

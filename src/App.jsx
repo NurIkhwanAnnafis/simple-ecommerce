@@ -1,43 +1,31 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { connect } from 'react-redux';
-
-import HomePage from './pages/homepage/homepage.component';
-import ShopPage from './pages/shop/shop.component';
-import CheckoutPage from './pages/checkout/checkout';
-
-import Header from './components/header/header.component';
-import SignInAndSignUp from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
-
-import { auth, convertCollectionsSnapshotToMap, createUserProfileDocument, firestore } from './firebase/firebase.utils';
-import { setCurrentUser } from './redux/user/user.action';
-import { selectCurrentUser } from './redux/user/user.selector';
 import { createStructuredSelector } from 'reselect';
 
-import CollectionPage from './pages/collection/collection.component';
-import { updateCollection } from './redux/shop/shop.action';
+import HomePage from './pages/homepage/homepage.component';
+import CheckoutPage from './pages/checkout/checkout';
+import SignInAndSignUp from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
+
+import Header from './components/header/header.component';
+
+import { setCurrentUser } from './redux/user/user.action';
+import { selectCurrentUser } from './redux/user/user.selector';
+import { auth, createUserProfileDocument } from './firebase/firebase.utils';
+
+import { fetchCollection } from './redux/shop/shop.action';
+
 import './App.css';
 
-import WithSpinner from './components/with-spinner/with-spinner';
-const CollectionsOverviewWithSpinner = WithSpinner(CollectionPage);
-const ShopPageWithSpinner = WithSpinner(ShopPage);
+import CollectionOverviewContainer from './components/collections-overview/collection-overview.container';
+import CollectionPageContainer from './pages/collection/collection.container';
 
-class App extends React.Component {
-  constructor() {
-    super();
+const App = (props) => {
+  
+  useEffect(() => {
+    const { setCurrentUser, fetchCollection } = props;
 
-    this.state = {
-      loading: true
-    }
-  }
-
-  unsubscribeFromAuth = null;
-  unsubscribeFromSnapshot = null;
-
-  componentDidMount() {
-    const { setCurrentUser, updateCollection } = this.props;
-
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+    const unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {
         const userRef = await createUserProfileDocument(userAuth);
 
@@ -52,53 +40,26 @@ class App extends React.Component {
       setCurrentUser(userAuth);
     })
 
-    const collectionRef = firestore.collection('collections');
+    fetchCollection();
 
-    //Promise Style by library
-    collectionRef.get().then(async snapshot => {
-      const collectionMap = convertCollectionsSnapshotToMap(snapshot);
-      updateCollection(collectionMap);
-      this.setState({ loading: false });
-    })
+    return () => {
+      unsubscribeFromAuth(null);
+    }
+  }, [])
 
-    //Snapshot Style
-    // collectionRef.onSnapshot(async snapshot => {
-    //   const collectionMap = convertCollectionsSnapshotToMap(snapshot);
-    //   updateCollection(collectionMap);
-    //   this.setState({ loading: false });
-    // })
-
-    //Legacy Promise Style
-    // fetch('https://firestore.googleapis.com/v1/projects/crown-db-9bb79/databases/(default)/documents/collections')
-    // .then(res => res.json())
-    // .then(collections => {
-    //   const collectionMap = convertCollectionsSnapshotToMap(collections);
-    //   updateCollection(collectionMap);
-    //   this.setState({ loading: false });
-    // })
-  }
-
-  componentWillUnmount() {
-    this.unsubscribeFromAuth();
-  }
-
-  render() {
-    const { currentUser } = this.props;
-    const { loading } = this.state;
-
-    return (
-      <div>
-        <Header/>
-          <Routes>
-            <Route caseSensitive path="/" element={<HomePage />} />
-            <Route path="/shop" element={<ShopPageWithSpinner isLoading={loading} />} />
-            <Route path="/shop/:id" element={<CollectionsOverviewWithSpinner isLoading={loading} />} />
-            <Route path="/checkout" element={<CheckoutPage />} />
-            <Route caseSensitive path="/signin" element={currentUser ? <Navigate to='/' /> : <SignInAndSignUp /> } />
-          </Routes>
-        </div>
-    )
-  }
+  const { currentUser } = props;
+  return (
+    <div>
+      <Header/>
+      <Routes>
+        <Route caseSensitive path="/" element={<HomePage />} />
+        <Route path="/shop" element={<CollectionOverviewContainer />} />
+        <Route path="/shop/:id" element={<CollectionPageContainer />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
+        <Route caseSensitive path="/signin" element={currentUser ? <Navigate to='/' /> : <SignInAndSignUp /> } />
+      </Routes>
+    </div>
+  )
 }
 
 const mapStateToProps = createStructuredSelector({
@@ -107,7 +68,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = dispatch => ({
   setCurrentUser: user => dispatch(setCurrentUser(user)),
-  updateCollection: collections => dispatch(updateCollection(collections))
+  fetchCollection: () => dispatch(fetchCollection())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
