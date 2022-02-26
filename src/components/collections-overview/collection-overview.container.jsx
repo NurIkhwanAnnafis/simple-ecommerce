@@ -1,18 +1,16 @@
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { createStructuredSelector } from 'reselect';
+import { useContext } from 'react';
+import { ContextApp } from '../../context/app/app-context-provider';
 
-import { selectIsCollectionFetching } from '../../redux/shop/shop.selector';
 import WithSpinner from '../with-spinner/with-spinner';
 import CollectionsOverview from './collections-overview.component';
 
-const mapStateToProps = createStructuredSelector({
-  isLoading: selectIsCollectionFetching
-})
+const CollectionOverviewContainer = () => {
+  const context = useContext(ContextApp);
+  const { shopContext: { isFetching } } = context;
 
-const CollectionOverviewContainer = compose(
-  connect(mapStateToProps),
-  WithSpinner
-)(CollectionsOverview)
+  return (
+    <CollectionsOverview isLoading={isFetching} />
+  )
+}
 
-export default CollectionOverviewContainer;
+export default WithSpinner(CollectionOverviewContainer);

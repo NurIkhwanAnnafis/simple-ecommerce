@@ -21,7 +21,6 @@
       opacity: 0.9;
     }
   }
-  
 
   &.large {
     height: 380px;
@@ -65,5 +64,9 @@
       font-weight: lighter;
       font-size: 16px;
     }
+  }
+
+  @media screen and (max-width: 768px) {
+    height: 200px !important;
   }
 }
