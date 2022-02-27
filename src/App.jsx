@@ -20,7 +20,7 @@ const App = () => {
   return (
     <div>
       <GlobalStyle />
-      <Header/>
+      <Header />
       <Routes>
         <Route caseSensitive path="/" element={<HomePage />} />
         <Route path="/shop" element={<CollectionOverviewContainer />} />
