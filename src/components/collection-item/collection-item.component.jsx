@@ -8,7 +8,7 @@ const CollectionItem = ({ item }) => {
   const { name, price, imageUrl } = item;
   const context = useContext(ContextApp);
   const { addItem } = context.cartContext;
-  console.log(context)
+
   return (
     <div className="collection-item">
       <div className="image" style={{ backgroundImage: `url(${imageUrl})` }} />

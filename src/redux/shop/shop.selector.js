@@ -8,7 +8,11 @@ export const selectCollections = createSelector(
   shop => shop.collections
 )
 
-export const selectCollectionsForPreview = (collections) => collections ? Object.keys(collections).map(key => collections[key]) : []
+export const selectCollectionsForPreview = (collections) => {
+  if (typeof collections !== 'object') return [];
+
+  return collections ? Object.keys(collections).map(key => collections[key]) : [];
+}
 
 export const selectCollection = memoize((collectionUrlParam) => 
   createSelector(
