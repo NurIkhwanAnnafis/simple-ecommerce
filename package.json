@@ -72,5 +72,9 @@
   "engines": {
     "node": "16.13.1",
     "npm": "8.1.2"
+  },
+  "devDependencies": {
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.6"
   }
 }

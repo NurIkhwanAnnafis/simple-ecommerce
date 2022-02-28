@@ -13,7 +13,10 @@ import { ContextApp } from "../../context/app/app-context-provider";
 
 const Header = () => {
   const context = useContext(ContextApp);
-  const { userContext: { currentUser }, cartContext: { hidden } } = context;
+  const { 
+    userContext: { currentUser }, 
+    cartContext: { hidden, cartItems, toggleCartHidden, } 
+  } = context;
 
   return (
     <HeaderContainer className="header">
@@ -36,7 +39,7 @@ const Header = () => {
             SIGN IN
           </OptionLink>
         )}
-        <CartIcon />
+        <CartIcon cartItems={cartItems} toggleCartHidden={toggleCartHidden} />
       </OptionsContainer>
       {!hidden && <CartDropdown />}
     </HeaderContainer>
