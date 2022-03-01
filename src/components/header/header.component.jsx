@@ -23,11 +23,11 @@ const Header = () => {
       <LogoContainer to="/">
         <Logo className="logo" />
       </LogoContainer>
-      <OptionsContainer className="options">
+      <OptionsContainer className="options" id="SHOP">
         <OptionLink className="option" to="/shop">
           SHOP
         </OptionLink>
-        <OptionLink className="option" to="/contact">
+        <OptionLink className="option" to="/contact" id="CONTACT">
           CONTACT
         </OptionLink>
         {currentUser ? (
@@ -35,7 +35,7 @@ const Header = () => {
             SIGN OUT
           </OptionLink> 
         ) : (
-          <OptionLink className="option" to="/signin">
+          <OptionLink className="option" to="/signin" id="SIGN_IN">
             SIGN IN
           </OptionLink>
         )}

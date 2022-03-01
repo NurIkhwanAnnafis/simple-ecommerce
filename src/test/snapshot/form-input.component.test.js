@@ -56,10 +56,4 @@ it('should to render form input component with props', () => {
    expect(result.props().children[1].type).toEqual('label');
    expect(result.props().children[1].props.className).toMatch(/(form-input-label)/);
    expect(result.props().children[1].props.children).toMatch('email label');
- 
-  //  //child component level 2
-  //  expect(result.props().children[1].props.children[0].type).toEqual('span');
-  //  expect(result.props().children[1].props.children[0].props.children).toEqual('Brown Brim');
-  //  expect(result.props().children[1].props.children[1].type).toEqual('span');
-  //  expect(result.props().children[1].props.children[1].props.children).toEqual('4 x $25');
 })
